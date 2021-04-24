@@ -1,5 +1,5 @@
 /** Components */
-import { FileAddIcon, FolderAddIcon } from '../ui';
+import { FileAddIcon, FolderAddIcon } from '../../ui';
 
 /** Styles */
 import styles from './SidebarControls.module.scss';

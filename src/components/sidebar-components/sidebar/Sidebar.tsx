@@ -1,7 +1,10 @@
 /** Components */
 import SidebarControls from '../sidebar-controls/SidebarControls';
-import DocList from '../doc-list/DocList';
-import { Logo } from '../ui';
+import DocTree from '../doc-tree/DocTree';
+import { Logo } from '../../ui';
+
+/** Test Data */
+import { structure } from '../../../test-data';
 
 /** Styles */
 import styles from './Sidebar.module.scss';
@@ -11,7 +14,7 @@ const Sidebar = () => {
     <div className={styles.wrapper}>
       <Logo />
       <SidebarControls />
-      <DocList />
+      <DocTree data={structure} />
     </div>
   );
 };

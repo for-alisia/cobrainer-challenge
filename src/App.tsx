@@ -1,6 +1,6 @@
 /** Components */
-import Editor from './components/editor/Editor';
-import Sidebar from './components/sidebar/Sidebar';
+import Editor from './components/editor-components/editor/Editor';
+import Sidebar from './components/sidebar-components/sidebar/Sidebar';
 
 /** Styles */
 import styles from './App.module.scss';
