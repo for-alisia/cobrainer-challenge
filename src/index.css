@@ -2,7 +2,9 @@
   --dark: #050a0d;
   --dark-light: #0e1315;
   --light: #e7edf1;
-  --pad-side: 0.5rem 1.5rem;
+  --primary: #179da1;
+  --secondary: #f7563b;
+  --pad-side: 0.8rem 1.5rem;
   --border-thick: 2px solid var(--light);
   --border-thin: 1px solid var(--light);
 }

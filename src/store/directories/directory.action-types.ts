@@ -1,0 +1,5 @@
+export enum DirectoryActionType {
+  FETCH_STRUCTURE = 'FETCH_STRUCTURE',
+  ADD_SELECTED = 'ADD_SELECTED',
+  ADD_ITEM = 'ADD_ITEM',
+}

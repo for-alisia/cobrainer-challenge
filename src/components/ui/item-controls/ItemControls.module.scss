@@ -1,0 +1,23 @@
+.itemControls {
+  svg {
+    opacity: 0.25;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    &:not(:last-child) {
+      margin-right: 0.5rem;
+    }
+
+    &.delete:hover {
+      color: var(--secondary);
+    }
+
+    &.edit:hover {
+      color: var(--primary);
+    }
+  }
+}

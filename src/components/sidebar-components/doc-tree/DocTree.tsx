@@ -1,31 +1,34 @@
 /** Components */
-import FileItem from '../file-item/FileItem';
-import FolderItem from '../folder-item/FolderItem';
+import Item from '../item/Item';
+
+/** Models */
+import { DirectoryItem } from '../../../models/directories.models';
 
 /** Styles */
 import styles from './DocTree.module.scss';
 
 interface DocTreeProps {
-  data: any[];
+  data: DirectoryItem[] | null;
 }
 
 const DocTree: React.FC<DocTreeProps> = ({ data }) => {
-  console.log(data);
   if (!data) return null;
   return (
     <div className={styles.wrapper}>
       {data.map((item) => {
         if (item.type === 'file') {
-          return <FileItem name={item.name} key={item.name} />;
+          return <Item item={item} key={item.name} type="file" />;
         }
 
         if (item.type === 'folder') {
           return (
-            <FolderItem name={item.name} key={item.name}>
-              <DocTree data={item.childrens} />
-            </FolderItem>
+            <Item item={item} key={item.name} type="folder">
+              <DocTree data={item.childrens ? item.childrens : null} />
+            </Item>
           );
         }
+
+        return null;
       })}
     </div>
   );

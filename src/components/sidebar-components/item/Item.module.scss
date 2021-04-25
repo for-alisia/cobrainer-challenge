@@ -1,0 +1,25 @@
+.folder {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-bottom: 0.5rem;
+
+  .arrow {
+    position: absolute;
+    top: 0;
+    left: -18px;
+  }
+
+  .folderIcon {
+    margin-right: 2px;
+  }
+
+  .folderLabel {
+    flex-grow: 1;
+    cursor: pointer;
+  }
+
+  .selectedItem {
+    color: var(--primary);
+  }
+}

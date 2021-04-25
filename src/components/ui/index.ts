@@ -1,5 +1,3 @@
 export { default as Logo } from './logo/Logo';
-export { default as FileIcon } from './icons/FileIcon';
-export { default as FileAddIcon } from './icons/FileAddIcon';
-export { default as FolderAddIcon } from './icons/FolderAddIcon';
-export { default as FolderIcon } from './icons/FolderIcon';
+export { default as ItemsControls } from './item-controls/ItemControls';
+export { default as Modal } from './modal/Modal';
