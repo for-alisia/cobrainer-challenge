@@ -15,4 +15,24 @@ export interface AddSelected {
   payload: DirectoryItem;
 }
 
-export type DirectoryAction = FetchStructure | AddItem | AddSelected;
+export interface RemoveSelected {
+  type: DirectoryActionType.REMOVE_SELECTED;
+}
+
+export interface EditItem {
+  type: DirectoryActionType.EDIT_ITEM;
+  payload: { newName: string; path: string };
+}
+
+export interface DeleteItem {
+  type: DirectoryActionType.DELETE_ITEM;
+  payload: string;
+}
+
+export type DirectoryAction =
+  | FetchStructure
+  | AddItem
+  | AddSelected
+  | RemoveSelected
+  | EditItem
+  | DeleteItem;

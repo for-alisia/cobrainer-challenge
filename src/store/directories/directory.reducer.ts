@@ -5,6 +5,10 @@ import { DirectoryAction } from './directory.actions';
 import { DirectoryActionType } from './directory.action-types';
 import { DirectoryItem } from '../../models/directories.models';
 
+/** Helpers */
+import { findByPath, deleteNode, addNode, getParent, checkIsUniqueName } from './directory.helpers';
+import { initialStructure } from './directory.test-data';
+
 interface DirectoryState {
   structure: DirectoryItem[];
   selectedItem: DirectoryItem | null;
@@ -13,38 +17,7 @@ interface DirectoryState {
 
 /** Test data */
 const initialState: DirectoryState = {
-  structure: [
-    {
-      type: 'folder',
-      name: 'src',
-      path: '/src',
-      childrens: [
-        {
-          type: 'folder',
-          name: 'Components',
-          path: '/src/Components',
-          childrens: [
-            {
-              type: 'file',
-              name: 'Modal.js',
-              path: '/src/Components/Modal.js',
-              content: 'example 1',
-            },
-            {
-              type: 'file',
-              name: 'Modal.css',
-              path: '/src/Components/Modal.css',
-              content: 'example 2',
-            },
-          ],
-        },
-        { type: 'file', name: 'index.js', path: '/src/index.js', content: 'index here' },
-        { type: 'file', name: 'index.html', path: '/src/index.html', content: 'html here' },
-      ],
-    },
-    { type: 'file', name: 'package.json', path: '/package.json', content: 'your packages here' },
-    { type: 'folder', name: 'test', path: '/test', childrens: [] },
-  ],
+  structure: initialStructure,
   selectedItem: null,
   message: null,
 };
@@ -65,6 +38,7 @@ const directoryReducer = produce(
         }
         // Add item to the root
         if (action.payload.path === null) {
+          state.message = null;
           state.structure.push(newItem);
           return state;
         }
@@ -79,12 +53,54 @@ const directoryReducer = produce(
           state.message = "Can't add to a file. Choose a directory instead";
           return state;
         }
-
+        // Check if new node is unique
+        if (!checkIsUniqueName(newItem.name, node)) {
+          state.message = "Can't add not unique item";
+          return state;
+        }
         // Add node
-        addNode(newItem, action.payload.path, state.structure, state);
+        addNode(newItem, action.payload.path, state.structure);
         return state;
+
+      case DirectoryActionType.EDIT_ITEM:
+        // Find node
+        let nodeToEdit = findByPath(action.payload.path, state.structure);
+        // Return if path is not correct
+        if (!nodeToEdit) {
+          state.message = `Can't find an item ${action.payload.path}`;
+          return state;
+        }
+        // Get parent
+        let parent = getParent(nodeToEdit, state.structure);
+        // Return if newName isn't unique in a parent folder
+        if (parent && !checkIsUniqueName(action.payload.newName, parent)) {
+          state.message = 'Not unique name!';
+          return state;
+        }
+        // Change a name
+        state.message = null;
+        nodeToEdit.name = action.payload.newName;
+
+        return state;
+
+      case DirectoryActionType.DELETE_ITEM:
+        let nodeToDelete = findByPath(action.payload, state.structure);
+        if (!nodeToDelete) {
+          state.message = `Can't find an item ${action.payload}`;
+        } else {
+          deleteNode(nodeToDelete, state.structure);
+          state.message = null;
+        }
+        return state;
+
       case DirectoryActionType.ADD_SELECTED:
         state.selectedItem = action.payload;
+        state.message = null;
+        return state;
+
+      case DirectoryActionType.REMOVE_SELECTED:
+        state.selectedItem = null;
+        state.message = null;
         return state;
       default:
         return state;
@@ -93,56 +109,3 @@ const directoryReducer = produce(
 );
 
 export default directoryReducer;
-
-function findByPath(path: string, structure: DirectoryItem[]): DirectoryItem | null {
-  let foundNode: DirectoryItem | null = null;
-
-  structure.forEach((node) => {
-    if (node.path === path) {
-      foundNode = node;
-      return;
-    }
-
-    if (node.type === 'folder' && node.childrens && node.childrens.length) {
-      foundNode = findByPath(path, node.childrens);
-    }
-  });
-
-  return foundNode;
-}
-
-function addNode(
-  node: DirectoryItem,
-  path: string,
-  structure: DirectoryItem[],
-  state: DirectoryState
-) {
-  structure.forEach((el) => {
-    if (el.path === path) {
-      console.log(checkIsUniqueName(node, el));
-      if (!checkIsUniqueName(node, el)) {
-        state.message = 'Item with this name is already exists';
-        return;
-      }
-      el.childrens?.push(node);
-      return;
-    }
-
-    if (el.type === 'folder' && el.childrens) {
-      addNode(node, path, el.childrens, state);
-    }
-  });
-}
-
-function checkIsUniqueName(child: DirectoryItem, parent: DirectoryItem): Boolean {
-  let isUnique = true;
-  if (parent.childrens) {
-    parent.childrens.forEach((el) => {
-      if (el.path === child.path) {
-        isUnique = false;
-      }
-    });
-  }
-
-  return isUnique;
-}

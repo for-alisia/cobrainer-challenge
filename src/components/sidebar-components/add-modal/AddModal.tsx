@@ -1,13 +1,10 @@
 import { useState } from 'react';
 
 /** Components */
-import { Modal } from '../../ui';
+import { Modal, Input } from '../../ui';
 
 /** Store */
 import { useActions } from '../../../hooks';
-
-/** Styles */
-import styles from './AddModal.module.scss';
 
 interface AddModalProps {
   type: 'file' | 'folder';
@@ -17,15 +14,23 @@ interface AddModalProps {
 
 const AddModal: React.FC<AddModalProps> = ({ path, closeHandler, type }) => {
   const [itemName, setItemName] = useState('');
+  const [error, setError] = useState(false);
 
   const { addItem } = useActions();
 
+  const nameHandler = (val: string) => {
+    setItemName(val);
+    setError(false);
+  };
+
   const confirmHandler = () => {
-    // TODO: Need to check if file or folder with this name is already exists
-    if (itemName !== '') {
-      addItem(itemName, path, type);
-      closeHandler();
+    if (itemName === '') {
+      setError(true);
+      return;
     }
+
+    addItem(itemName, path, type);
+    closeHandler();
   };
 
   return (
@@ -34,16 +39,15 @@ const AddModal: React.FC<AddModalProps> = ({ path, closeHandler, type }) => {
       onDismiss={closeHandler}
       onConfirm={confirmHandler}
     >
-      <form>
-        <label htmlFor="name">{type} name:</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={itemName}
-          onChange={(e) => setItemName(e.target.value)}
-        />
-      </form>
+      <Input
+        type="text"
+        name="name"
+        label={`Enter a ${type} name:`}
+        value={itemName}
+        changeHandler={nameHandler}
+        error={error}
+        errorMsg="You should provide a name"
+      />
     </Modal>
   );
 };

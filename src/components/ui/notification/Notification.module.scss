@@ -1,0 +1,17 @@
+.notification {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  color: var(--light);
+}
+
+.warning {
+  background-color: var(--secondary);
+  border: 1px solid var(--secondary-dark);
+}
+
+.success {
+  background-color: var(--primary);
+  border: 1px solid var(--primary-dark);
+}

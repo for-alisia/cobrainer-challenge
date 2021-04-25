@@ -1,12 +1,93 @@
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--dark);
+  opacity: 0.5;
+}
+
 .modal {
   position: absolute;
   width: 30rem;
-  height: 15rem;
+  height: 13rem;
   background-color: var(--dark-light);
   margin: auto;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.close {
+  color: var(--primary);
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  cursor: pointer;
+  transition: color 0.3s ease-out;
+
+  &:hover {
+    color: var(--primary-dark);
+  }
+}
+
+.header {
+  border-bottom: var(--border-thin);
+  padding: 0.5rem 1rem;
+  font-size: 1.3rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.main {
+  padding: 0.5rem 1rem;
+  flex-grow: 1;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.formContent {
+  flex-grow: 1;
+}
+
+.controlsWrapper {
+  padding-bottom: 0.5rem;
+  text-align: right;
+}
+
+.cancel,
+.confirm {
+  padding: 0.3rem 0.8rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  border: none;
+  color: var(--light);
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+
+.cancel {
+  background-color: var(--secondary);
+  margin-right: 0.5rem;
+
+  &:hover {
+    background-color: var(--secondary-dark);
+  }
+}
+
+.confirm {
+  background-color: var(--primary);
+
+  &:hover {
+    background-color: var(--primary-dark);
+  }
 }

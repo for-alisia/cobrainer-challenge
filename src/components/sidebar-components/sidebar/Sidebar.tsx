@@ -4,15 +4,24 @@ import DocTree from '../doc-tree/DocTree';
 import { Logo } from '../../ui';
 
 /** Store */
-import { useTypedSelector } from '../../../hooks';
+import { useTypedSelector, useActions } from '../../../hooks';
 
 /** Styles */
 import styles from './Sidebar.module.scss';
 
 const Sidebar = () => {
   const structure = useTypedSelector(({ directories: { structure } }) => structure);
+
+  const { removeSelected } = useActions();
+
+  const clickHandler = (e: any) => {
+    if (e.target.dataset.el === 'out') {
+      removeSelected();
+    }
+  };
+
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} onClick={clickHandler} data-el="out">
       <Logo />
       <SidebarControls />
       <div className={styles.treeWrapper}>
