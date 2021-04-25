@@ -63,31 +63,3 @@
   padding-bottom: 0.5rem;
   text-align: right;
 }
-
-.cancel,
-.confirm {
-  padding: 0.3rem 0.8rem;
-  font-size: 1rem;
-  text-transform: uppercase;
-  border: none;
-  color: var(--light);
-  cursor: pointer;
-  transition: all 0.2s ease-out;
-}
-
-.cancel {
-  background-color: var(--secondary);
-  margin-right: 0.5rem;
-
-  &:hover {
-    background-color: var(--secondary-dark);
-  }
-}
-
-.confirm {
-  background-color: var(--primary);
-
-  &:hover {
-    background-color: var(--primary-dark);
-  }
-}

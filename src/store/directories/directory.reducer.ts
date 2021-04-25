@@ -93,6 +93,22 @@ const directoryReducer = produce(
         }
         return state;
 
+      case DirectoryActionType.CHANGE_CONTENT:
+        let nodeToChange = findByPath(action.payload.path, state.structure);
+
+        if (!nodeToChange) {
+          state.message = "Can't find the file!";
+          return state;
+        }
+
+        if (nodeToChange.type === 'folder') {
+          state.message = "Can't change folder's content";
+          return state;
+        }
+
+        nodeToChange.content = action.payload.newContent;
+        return state;
+
       case DirectoryActionType.ADD_SELECTED:
         state.selectedItem = action.payload;
         state.message = null;

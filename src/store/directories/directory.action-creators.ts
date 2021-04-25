@@ -7,6 +7,7 @@ import {
   RemoveSelected,
   EditItem,
   DeleteItem,
+  ChangeContent,
 } from './directory.actions';
 
 export const fetchStructure = (): FetchStructure => ({
@@ -35,4 +36,9 @@ export const editItem = (newName: string, path: string): EditItem => ({
 export const deleteItem = (path: string): DeleteItem => ({
   type: DirectoryActionType.DELETE_ITEM,
   payload: path,
+});
+
+export const changeContent = (path: string, newContent: string): ChangeContent => ({
+  type: DirectoryActionType.CHANGE_CONTENT,
+  payload: { path, newContent },
 });

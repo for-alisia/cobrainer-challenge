@@ -29,10 +29,16 @@ export interface DeleteItem {
   payload: string;
 }
 
+export interface ChangeContent {
+  type: DirectoryActionType.CHANGE_CONTENT;
+  payload: { path: string; newContent: string };
+}
+
 export type DirectoryAction =
   | FetchStructure
   | AddItem
   | AddSelected
   | RemoveSelected
   | EditItem
-  | DeleteItem;
+  | DeleteItem
+  | ChangeContent;

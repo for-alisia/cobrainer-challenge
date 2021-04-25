@@ -5,4 +5,5 @@ export enum DirectoryActionType {
   ADD_ITEM = 'ADD_ITEM',
   EDIT_ITEM = 'EDIT_ITEM',
   DELETE_ITEM = 'DELETE_ITEM',
+  CHANGE_CONTENT = 'CHANGE_CONTENT',
 }

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 /** Components */
 import { BsFillXCircleFill } from 'react-icons/bs';
+import Button from '../button/Button';
 
 /** Styles */
 import styles from './Modal.module.scss';
@@ -29,12 +30,8 @@ const Modal: React.FC<ModalProps> = ({ title, children, onDismiss, onConfirm }) 
           <form onSubmit={submitHandler} className={styles.form}>
             <div className={styles.formContent}>{children}</div>
             <div className={styles.controlsWrapper}>
-              <button className={styles.cancel} type="button" onClick={onDismiss}>
-                Cancel
-              </button>
-              <button className={styles.confirm} type="submit">
-                Confirm
-              </button>
+              <Button type="button" actionHandler={onDismiss} text="Cancel" view="warning" />
+              <Button type="submit" text="Confirm" view="success" />
             </div>
           </form>
         </main>

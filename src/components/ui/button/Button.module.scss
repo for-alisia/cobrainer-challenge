@@ -1,0 +1,26 @@
+.button {
+  padding: 0.3rem 0.8rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  border: none;
+  color: var(--light);
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+}
+
+.warning {
+  background-color: var(--secondary);
+  margin-right: 0.5rem;
+
+  &:hover {
+    background-color: var(--secondary-dark);
+  }
+}
+
+.success {
+  background-color: var(--primary);
+
+  &:hover {
+    background-color: var(--primary-dark);
+  }
+}
