@@ -1,6 +1,7 @@
 /** Components */
 import Editor from './components/editor-components/editor/Editor';
 import Sidebar from './components/sidebar-components/sidebar/Sidebar';
+import TabBar from './components/editor-components/tabBar/TabBar';
 import { Notification } from './components/ui';
 
 /** Store */
@@ -14,7 +15,10 @@ const App = () => {
   return (
     <div className={styles.wrapper}>
       <Sidebar />
-      <Editor />
+      <div className={styles.editor}>
+        <TabBar />
+        <Editor />
+      </div>
       {notification && <Notification type="warning" text={notification} />}
     </div>
   );

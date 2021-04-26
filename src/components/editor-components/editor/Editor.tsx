@@ -10,26 +10,26 @@ import { useTypedSelector, useActions } from '../../../hooks';
 import styles from './Editor.module.scss';
 
 const Editor = () => {
-  const selectedItem = useTypedSelector(({ directories: { selectedItem } }) => selectedItem);
+  const activeTab = useTypedSelector(({ directories: { activeTab } }) => activeTab);
   const { changeContent } = useActions();
   const [editMode, setEditMode] = useState(false);
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    if (selectedItem && selectedItem.content) {
-      setContent(selectedItem.content);
+    if (activeTab && activeTab.content) {
+      setContent(activeTab.content);
     }
-  }, [selectedItem]);
+  }, [activeTab]);
 
   const saveHandler = () => {
-    if (selectedItem) {
-      changeContent(selectedItem.path, content);
+    if (activeTab) {
+      changeContent(activeTab.path, content);
     }
   };
 
   return (
     <div className={styles.editor}>
-      {selectedItem && selectedItem.type === 'file' ? (
+      {activeTab ? (
         <div className={styles.content} onClick={() => setEditMode(true)}>
           {editMode ? (
             <>
@@ -39,7 +39,7 @@ const Editor = () => {
               </div>
             </>
           ) : (
-            selectedItem.content
+            activeTab.content
           )}
         </div>
       ) : (

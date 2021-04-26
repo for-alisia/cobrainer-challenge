@@ -1,17 +1,25 @@
 import { DirectoryItem } from './../../models/directories.models';
 import { DirectoryActionType } from './directory.action-types';
 import {
-  FetchStructure,
+  FetchStructureSuccess,
   AddItem,
   AddSelected,
   RemoveSelected,
   EditItem,
   DeleteItem,
   ChangeContent,
+  FetchStructure,
+  SetActiveTab,
+  RemoveFromTabs,
 } from './directory.actions';
 
 export const fetchStructure = (): FetchStructure => ({
   type: DirectoryActionType.FETCH_STRUCTURE,
+});
+
+export const fetchStructureSuccess = (structure: DirectoryItem[]): FetchStructureSuccess => ({
+  type: DirectoryActionType.FETCH_STRUCTURE_SUCCESS,
+  payload: structure,
 });
 
 export const addItem = (name: string, path: string | null, type: 'file' | 'folder'): AddItem => ({
@@ -41,4 +49,14 @@ export const deleteItem = (path: string): DeleteItem => ({
 export const changeContent = (path: string, newContent: string): ChangeContent => ({
   type: DirectoryActionType.CHANGE_CONTENT,
   payload: { path, newContent },
+});
+
+export const setActiveTab = (item: DirectoryItem): SetActiveTab => ({
+  type: DirectoryActionType.SET_ACTIVE_TAB,
+  payload: item,
+});
+
+export const removeFromTabs = (item: DirectoryItem): RemoveFromTabs => ({
+  type: DirectoryActionType.REMOVE_FROM_TABS,
+  payload: item,
 });

@@ -4,6 +4,10 @@ import { DirectoryActionType } from './directory.action-types';
 export interface FetchStructure {
   type: DirectoryActionType.FETCH_STRUCTURE;
 }
+export interface FetchStructureSuccess {
+  type: DirectoryActionType.FETCH_STRUCTURE_SUCCESS;
+  payload: DirectoryItem[];
+}
 
 export interface AddItem {
   type: DirectoryActionType.ADD_ITEM;
@@ -34,11 +38,24 @@ export interface ChangeContent {
   payload: { path: string; newContent: string };
 }
 
+export interface SetActiveTab {
+  type: DirectoryActionType.SET_ACTIVE_TAB;
+  payload: DirectoryItem;
+}
+
+export interface RemoveFromTabs {
+  type: DirectoryActionType.REMOVE_FROM_TABS;
+  payload: DirectoryItem;
+}
+
 export type DirectoryAction =
-  | FetchStructure
+  | FetchStructureSuccess
   | AddItem
   | AddSelected
   | RemoveSelected
   | EditItem
   | DeleteItem
-  | ChangeContent;
+  | ChangeContent
+  | FetchStructure
+  | SetActiveTab
+  | RemoveFromTabs;

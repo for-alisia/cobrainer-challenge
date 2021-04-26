@@ -1,5 +1,10 @@
 .wrapper {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   background-color: var(--dark);
+}
+
+.editor {
+  flex-grow: 1;
+  overflow: auto;
 }

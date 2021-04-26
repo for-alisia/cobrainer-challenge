@@ -68,3 +68,10 @@ export function checkIsUniqueName(name: string, parent: DirectoryItem): Boolean 
 
   return isUnique;
 }
+
+export function changePath(path: string, newName: string): string {
+  let arr = path.split('/');
+  arr.pop();
+  arr.push(newName);
+  return arr.join('/');
+}

@@ -6,13 +6,22 @@ import { DirectoryActionType } from './directory.action-types';
 import { DirectoryItem } from '../../models/directories.models';
 
 /** Helpers */
-import { findByPath, deleteNode, addNode, getParent, checkIsUniqueName } from './directory.helpers';
+import {
+  findByPath,
+  deleteNode,
+  addNode,
+  getParent,
+  checkIsUniqueName,
+  changePath,
+} from './directory.helpers';
 import { initialStructure } from './directory.test-data';
 
 interface DirectoryState {
   structure: DirectoryItem[];
   selectedItem: DirectoryItem | null;
   message: string | null;
+  openedTabs: DirectoryItem[];
+  activeTab: DirectoryItem | null;
 }
 
 /** Test data */
@@ -20,6 +29,8 @@ const initialState: DirectoryState = {
   structure: initialStructure,
   selectedItem: null,
   message: null,
+  openedTabs: [],
+  activeTab: null,
 };
 
 const directoryReducer = produce(
@@ -35,6 +46,10 @@ const directoryReducer = produce(
         // Add childrens to a new folder
         if (action.payload.type === 'folder') {
           newItem.childrens = [];
+        }
+        // Add empty content to a new file
+        if (action.payload.type === 'file') {
+          newItem.content = 'Type something here...';
         }
         // Add item to the root
         if (action.payload.path === null) {
@@ -81,6 +96,14 @@ const directoryReducer = produce(
         state.message = null;
         nodeToEdit.name = action.payload.newName;
 
+        let idxToChange = state.openedTabs.findIndex((el) => el.path === nodeToEdit?.path);
+        // Change a path here
+        nodeToEdit.path = changePath(nodeToEdit.path, action.payload.newName);
+        // Replace in a tabs array
+        if (idxToChange !== -1) {
+          state.openedTabs.splice(idxToChange, 1, nodeToEdit);
+        }
+
         return state;
 
       case DirectoryActionType.DELETE_ITEM:
@@ -89,6 +112,16 @@ const directoryReducer = produce(
           state.message = `Can't find an item ${action.payload}`;
         } else {
           deleteNode(nodeToDelete, state.structure);
+          //Check if the node is inside opened tabs
+          let idxInTab = state.openedTabs.findIndex((el) => el.path === nodeToDelete?.path);
+          if (idxInTab !== -1) {
+            state.openedTabs.splice(idxInTab, 1);
+          }
+
+          if (state.activeTab && nodeToDelete.path === state.activeTab.path) {
+            state.activeTab = state.openedTabs[0] || null;
+          }
+
           state.message = null;
         }
         return state;
@@ -107,16 +140,63 @@ const directoryReducer = produce(
         }
 
         nodeToChange.content = action.payload.newContent;
+
+        let idxContent = state.openedTabs.findIndex((el) => el.path === nodeToChange?.path);
+
+        if (idxContent !== -1) {
+          state.openedTabs.splice(idxContent, 1, nodeToChange);
+        }
+
+        if (nodeToChange.path === state.activeTab?.path) {
+          state.activeTab = nodeToChange;
+        }
+
         return state;
 
       case DirectoryActionType.ADD_SELECTED:
         state.selectedItem = action.payload;
+        if (action.payload.type === 'file') {
+          // Check if we already have this file opened
+          let idxInTabs = state.openedTabs.findIndex((el) => el.path === action.payload.path);
+          if (idxInTabs === -1) {
+            state.openedTabs.push(action.payload);
+          }
+          state.activeTab = action.payload;
+        }
         state.message = null;
         return state;
 
       case DirectoryActionType.REMOVE_SELECTED:
         state.selectedItem = null;
         state.message = null;
+        return state;
+
+      case DirectoryActionType.FETCH_STRUCTURE_SUCCESS:
+        state.structure = action.payload;
+        return state;
+
+      case DirectoryActionType.SET_ACTIVE_TAB:
+        if (action.payload.type === 'file') {
+          state.activeTab = action.payload;
+        } else {
+          state.message = "Can't set a folder as an active tab";
+        }
+        return state;
+
+      case DirectoryActionType.REMOVE_FROM_TABS:
+        // Find a tab
+        let idx = state.openedTabs.findIndex((el) => el.path === action.payload.path);
+        // If there is no such tab, return an error
+        if (idx === -1) {
+          state.message = "Can't close this item";
+          return state;
+        }
+        // Remove a tab
+        state.openedTabs.splice(idx, 1);
+        // If this tab was active, change an active tab to a first tab from opened tabs array
+        if (state.activeTab && state.activeTab.path === action.payload.path) {
+          state.activeTab = state.openedTabs[0] || null;
+        }
         return state;
       default:
         return state;

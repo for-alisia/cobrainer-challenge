@@ -1,0 +1,44 @@
+.tabBar {
+  padding: 1rem 2rem;
+  border-bottom: var(--border-thick);
+  height: 3.5rem;
+  position: sticky;
+  top: 0;
+  background-color: var(--dark);
+  z-index: 2;
+}
+
+.list {
+  display: flex;
+  list-style-type: none;
+
+  li {
+    padding: 0 1.5rem;
+    border-right: var(--border-thin);
+    cursor: pointer;
+    position: relative;
+
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      border-right: none;
+    }
+
+    &.active {
+      color: var(--primary);
+    }
+
+    .ioClose {
+      position: absolute;
+      top: -6px;
+      right: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease-out;
+
+      &:hover {
+        color: var(--secondary);
+      }
+    }
+  }
+}
