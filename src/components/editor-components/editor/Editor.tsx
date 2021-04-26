@@ -39,7 +39,7 @@ const Editor = () => {
               </div>
             </>
           ) : (
-            activeTab.content
+            <div className={styles.plain}>{activeTab.content}</div>
           )}
         </div>
       ) : (
