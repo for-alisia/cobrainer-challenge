@@ -30,6 +30,22 @@ export class DirectoryItem {
   editName(newName: string) {
     this.name = newName;
   }
+
+  addChild(item: DirectoryItem) {
+    if (this.type === 'folder' && this.childrens) {
+      this.childrens.push(item);
+    }
+  }
+
+  deleteChild(item: DirectoryItem) {
+    if (this.type === 'folder' && this.childrens) {
+      let index = this.childrens.findIndex((el) => el.path === item.path);
+
+      if (index !== -1) {
+        this.childrens.splice(index, 1);
+      }
+    }
+  }
 }
 
 export default class DirectoryStore {
@@ -84,7 +100,7 @@ export default class DirectoryStore {
     }
 
     // Add new node to a parent
-    nodeToPaste.childrens?.push(newItem);
+    nodeToPaste.addChild(newItem);
   }
 
   // Reaction: EDIT ITEM'S NAME
@@ -106,7 +122,7 @@ export default class DirectoryStore {
       return;
     }
 
-    nodeToEdit.name = newName;
+    nodeToEdit.editName(newName);
   }
 
   // Reaction: DELETE_ITEM
@@ -119,11 +135,8 @@ export default class DirectoryStore {
     }
 
     let parentNode = this.getParent(nodeToDelete);
-
-    if (parentNode && parentNode.childrens) {
-      let index = parentNode.childrens.findIndex((el) => el.path === nodeToDelete?.path);
-
-      parentNode.childrens.splice(index, 1);
+    if (parentNode) {
+      parentNode.deleteChild(nodeToDelete);
     }
   }
 
