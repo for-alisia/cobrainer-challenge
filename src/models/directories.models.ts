@@ -17,3 +17,5 @@ export interface DirectoryItem {
   childrens?: DirectoryItem[];
   content?: string;
 }
+
+export type ItemType = 'file' | 'folder';

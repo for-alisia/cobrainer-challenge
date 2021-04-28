@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+
+import { createStore } from './mobx/helpers/create-store';
+import { StoreProvider } from './mobx/helpers/store-context';
 
 /** Styles */
 import './index.css';
@@ -8,14 +10,13 @@ import './index.css';
 /** Components */
 import App from './App';
 
-/** Store */
-import { store } from './store/store';
+const store = createStore();
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <StoreProvider value={store}>
       <App />
-    </Provider>
+    </StoreProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

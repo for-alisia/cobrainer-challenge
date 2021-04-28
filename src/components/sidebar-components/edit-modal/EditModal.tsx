@@ -1,7 +1,6 @@
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../../../mobx/helpers/use-store';
 import { useState } from 'react';
-
-/** Store */
-import { useActions } from '../../../hooks';
 
 /** Comonents */
 import { Modal, Input } from '../../ui';
@@ -17,7 +16,7 @@ const EditModal: React.FC<EditModalProps> = ({ type, name, path, closeHandler })
   const [itemName, setItemName] = useState(name);
   const [error, setError] = useState(false);
 
-  const { editItem } = useActions();
+  const { directoryStore } = useStore();
 
   const changeHandler = (val: string) => {
     setItemName(val);
@@ -28,7 +27,7 @@ const EditModal: React.FC<EditModalProps> = ({ type, name, path, closeHandler })
       setError(true);
       return;
     }
-    editItem(itemName, path);
+    directoryStore.edit(itemName, path);
     closeHandler();
   };
   return (
@@ -46,4 +45,4 @@ const EditModal: React.FC<EditModalProps> = ({ type, name, path, closeHandler })
   );
 };
 
-export default EditModal;
+export default observer(EditModal);

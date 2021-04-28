@@ -1,11 +1,10 @@
+import { observer } from 'mobx-react-lite';
 import { useState, useRef } from 'react';
+import { useStore } from '../../../mobx/helpers/use-store';
 
 /** Components */
 import { BsFileEarmarkPlus, BsFolderPlus } from 'react-icons/bs';
 import AddModal from '../add-modal/AddModal';
-
-/** Store */
-import { useTypedSelector } from '../../../hooks';
 
 /** Styles */
 import styles from './SidebarControls.module.scss';
@@ -16,7 +15,7 @@ const SidebarControls = () => {
   const [addModal, setAddModal] = useState(false);
   const modalType = useRef<ModalType>('file');
 
-  const selectedItem = useTypedSelector(({ directories: { selectedItem } }) => selectedItem);
+  const { directoryStore } = useStore();
 
   const addFileHandler = () => {
     modalType.current = 'file';
@@ -42,7 +41,7 @@ const SidebarControls = () => {
       {addModal && (
         <AddModal
           closeHandler={closeModal}
-          path={selectedItem ? selectedItem.path : null}
+          path={directoryStore.selectedItem ? directoryStore.selectedItem.path : null}
           type={modalType.current!}
         />
       )}
@@ -50,4 +49,4 @@ const SidebarControls = () => {
   );
 };
 
-export default SidebarControls;
+export default observer(SidebarControls);

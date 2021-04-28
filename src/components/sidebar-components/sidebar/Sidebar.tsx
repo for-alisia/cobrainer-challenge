@@ -1,40 +1,33 @@
-import { useEffect } from 'react';
-
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../../../mobx/helpers/use-store';
 /** Components */
 import SidebarControls from '../sidebar-controls/SidebarControls';
 import DocTree from '../doc-tree/DocTree';
 import { Logo } from '../../ui';
 
-/** Store */
-import { useTypedSelector, useActions } from '../../../hooks';
-
 /** Styles */
 import styles from './Sidebar.module.scss';
 
 const Sidebar = () => {
-  const structure = useTypedSelector(({ directories: { structure } }) => structure);
-
-  const { removeSelected, fetchStructure } = useActions();
+  const { directoryStore } = useStore();
 
   const clickHandler = (e: any) => {
     if (e.target.dataset.el === 'out') {
-      removeSelected();
+      directoryStore.removeSelected();
     }
   };
 
-  useEffect(() => {
-    fetchStructure();
-  }, [fetchStructure]);
+  console.log('re-render');
 
   return (
     <div className={styles.wrapper} onClick={clickHandler} data-el="out">
       <Logo />
       <SidebarControls />
       <div className={styles.treeWrapper}>
-        <DocTree data={structure} />
+        <DocTree data={directoryStore.structure} />
       </div>
     </div>
   );
 };
 
-export default Sidebar;
+export default observer(Sidebar);

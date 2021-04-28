@@ -1,10 +1,9 @@
+import { observer } from 'mobx-react-lite';
 import { useState } from 'react';
+import { useStore } from '../../../mobx/helpers/use-store';
 
 /** Components */
 import { Modal, Input } from '../../ui';
-
-/** Store */
-import { useActions } from '../../../hooks';
 
 interface AddModalProps {
   type: 'file' | 'folder';
@@ -16,7 +15,7 @@ const AddModal: React.FC<AddModalProps> = ({ path, closeHandler, type }) => {
   const [itemName, setItemName] = useState('');
   const [error, setError] = useState(false);
 
-  const { addItem } = useActions();
+  const { directoryStore } = useStore();
 
   const nameHandler = (val: string) => {
     setItemName(val);
@@ -29,7 +28,7 @@ const AddModal: React.FC<AddModalProps> = ({ path, closeHandler, type }) => {
       return;
     }
 
-    addItem(itemName, path, type);
+    directoryStore.add(itemName, type, path);
     closeHandler();
   };
 
@@ -52,4 +51,4 @@ const AddModal: React.FC<AddModalProps> = ({ path, closeHandler, type }) => {
   );
 };
 
-export default AddModal;
+export default observer(AddModal);

@@ -1,13 +1,12 @@
 import { useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../../../mobx/helpers/use-store';
 
 /** Components */
 import { BsFolder, BsChevronRight, BsChevronDown, BsFileEarmark } from 'react-icons/bs';
 import { ItemsControls } from '../../ui';
 import EditModal from '../edit-modal/EditModal';
 import DeleteModal from '../delete-modal/DeleteModal';
-
-/** Store */
-import { useActions, useTypedSelector } from '../../../hooks';
 
 /** Models */
 import { DirectoryItem } from '../../../models/directories.models';
@@ -25,18 +24,16 @@ const Item: React.FC<ItemProps> = ({ item, children, type }) => {
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
-  const { addSelected } = useActions();
+  const { directoryStore } = useStore();
 
-  const selectedItem = useTypedSelector(({ directories: { selectedItem } }) => selectedItem);
-
-  const isSelected = selectedItem && selectedItem.path === item.path;
+  const isSelected = directoryStore.selectedItem && directoryStore.selectedItem.path === item.path;
 
   const folderHandler = () => {
     if (type === 'folder') {
       setIsOpen(!isOpen);
     }
 
-    addSelected(item);
+    directoryStore.addSelected(item);
   };
 
   const editHandler = () => {
@@ -90,4 +87,4 @@ const Item: React.FC<ItemProps> = ({ item, children, type }) => {
   );
 };
 
-export default Item;
+export default observer(Item);

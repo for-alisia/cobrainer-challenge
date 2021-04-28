@@ -1,5 +1,5 @@
-/** Store */
-import { useActions } from '../../../hooks';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../../../mobx/helpers/use-store';
 
 /** Comonents */
 import { Modal } from '../../ui';
@@ -15,10 +15,10 @@ interface DeleteModalProps {
 }
 
 const EditModal: React.FC<DeleteModalProps> = ({ type, name, path, closeHandler }) => {
-  const { deleteItem } = useActions();
+  const { directoryStore } = useStore();
 
   const deleteHandler = () => {
-    deleteItem(path);
+    directoryStore.remove(path);
     closeHandler();
   };
 
@@ -36,4 +36,4 @@ const EditModal: React.FC<DeleteModalProps> = ({ type, name, path, closeHandler 
   );
 };
 
-export default EditModal;
+export default observer(EditModal);
