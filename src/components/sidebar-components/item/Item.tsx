@@ -16,10 +16,9 @@ import styles from './Item.module.scss';
 
 interface ItemProps {
   item: DirectoryItem;
-  type?: 'folder' | 'file';
 }
 
-const Item: React.FC<ItemProps> = ({ item, children, type }) => {
+const Item: React.FC<ItemProps> = ({ item, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
@@ -29,7 +28,7 @@ const Item: React.FC<ItemProps> = ({ item, children, type }) => {
   const isSelected = directoryStore.selectedItem && directoryStore.selectedItem.path === item.path;
 
   const folderHandler = () => {
-    if (type === 'folder') {
+    if (item.type === 'folder') {
       setIsOpen(!isOpen);
     }
 
@@ -51,12 +50,12 @@ const Item: React.FC<ItemProps> = ({ item, children, type }) => {
           className={`${styles.itemLabel} ${isSelected && styles.selectedItem}`}
           onClick={folderHandler}
         >
-          {type === 'folder' && (
+          {item.type === 'folder' && (
             <span className={styles.arrow}>{isOpen ? <BsChevronDown /> : <BsChevronRight />}</span>
           )}
 
           <span className={styles.folderIcon}>
-            {type === 'folder' ? <BsFolder /> : <BsFileEarmark />}
+            {item.type === 'folder' ? <BsFolder /> : <BsFileEarmark />}
           </span>
           <span>{item.name}</span>
         </div>

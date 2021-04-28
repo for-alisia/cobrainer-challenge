@@ -53,17 +53,19 @@ export default class DirectoryStore {
   structure: DirectoryItem[];
   selectedItem: DirectoryItem | null;
   message: string | null;
+  root: DirectoryItem;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     this.structure = [];
     this.selectedItem = null;
     this.message = null;
+    this.root = new DirectoryItem('_root', '/', 'folder');
 
     makeAutoObservable(this, {
       findNode: false,
       checkIfUnique: false,
-      getParent: false,
+      //getParent: false,
     });
   }
 
@@ -71,74 +73,13 @@ export default class DirectoryStore {
   add(name: string, type: ItemType, path: string | null) {
     let newPath = path ? `${path}/${name}` : `/${name}`;
     const newItem = new DirectoryItem(name, newPath, type);
-
-    // Add to root
-    if (!path) {
-      this.structure.push(newItem);
-      return;
-    }
-
-    // Get parent node
-    let nodeToPaste = this.findNode(path, this.structure);
-
-    // If parent node doesn't exist
-    if (!nodeToPaste) {
-      this.message = 'Sorry, can not find a path';
-      return;
-    }
-
-    // If parent node is file
-    if (nodeToPaste.type === 'file') {
-      this.message = 'Sorry, can not add to a file, choose a folder instead';
-      return;
-    }
-
-    // If name is not unique in a folder
-    if (!this.checkIfUnique(name, type, nodeToPaste)) {
-      this.message = 'Sorry, this item is not unique';
-      return;
-    }
-
-    // Add new node to a parent
-    nodeToPaste.addChild(newItem);
   }
 
   // Reaction: EDIT ITEM'S NAME
-  edit(newName: string, path: string) {
-    let nodeToEdit = this.findNode(path, this.structure);
-
-    console.log(nodeToEdit);
-
-    if (!nodeToEdit) {
-      this.message = 'Can not find an item with this path';
-      return;
-    }
-
-    let parent = this.getParent(nodeToEdit);
-
-    // TODO: if the node is in the root?
-    if (parent && !this.checkIfUnique(newName, nodeToEdit.type, parent)) {
-      this.message = 'Not unique name';
-      return;
-    }
-
-    nodeToEdit.editName(newName);
-  }
+  edit(newName: string, path: string) {}
 
   // Reaction: DELETE_ITEM
-  remove(path: string) {
-    let nodeToDelete = this.findNode(path, this.structure);
-
-    if (!nodeToDelete) {
-      this.message = 'Can not find an item with this path';
-      return;
-    }
-
-    let parentNode = this.getParent(nodeToDelete);
-    if (parentNode) {
-      parentNode.deleteChild(nodeToDelete);
-    }
-  }
+  remove(path: string) {}
 
   // Reaction: ADD_SELECTED
   addSelected(node: DirectoryItem) {
@@ -152,22 +93,10 @@ export default class DirectoryStore {
   }
 
   // Helper: FIND IN STRUCTURE
-  findNode(path: string, structure: DirectoryItem[]): DirectoryItem | null {
+  findNode(path: string, root: DirectoryItem): DirectoryItem | null {
     let foundNode: DirectoryItem | null = null;
 
-    for (let i = 0; i < structure.length; i++) {
-      let node = structure[i];
-      if (foundNode) {
-        return foundNode;
-      }
-      if (node.path === path) {
-        foundNode = node;
-        return foundNode;
-      }
-      if (node.childrens && node.childrens.length) {
-        foundNode = this.findNode(path, node.childrens);
-      }
-    }
+    if (path === root.path) return root;
 
     return foundNode;
   }
@@ -187,12 +116,12 @@ export default class DirectoryStore {
     return isUnique;
   }
 
-  // Helper: GET PARENT
-  getParent(node: DirectoryItem) {
-    let path = node.path;
-    let parentArr = path.split('/');
-    parentArr.pop();
-    let parentPath = parentArr.join('/');
-    return this.findNode(parentPath, this.structure);
-  }
+  // // Helper: GET PARENT
+  // getParent(node: DirectoryItem) {
+  //   let path = node.path;
+  //   let parentArr = path.split('/');
+  //   parentArr.pop();
+  //   let parentPath = parentArr.join('/');
+  //   return this.findNode(parentPath, this.structure);
+  // }
 }

@@ -16,14 +16,13 @@ const Sidebar = () => {
       directoryStore.removeSelected();
     }
   };
-  console.log('re-render from sidebar');
-  console.log(directoryStore.structure);
+
   return (
     <div className={styles.wrapper} onClick={clickHandler} data-el="out">
       <Logo />
       <SidebarControls />
       <div className={styles.treeWrapper}>
-        <DocTree data={directoryStore.structure} />
+        <DocTree data={directoryStore.root} />
       </div>
     </div>
   );
