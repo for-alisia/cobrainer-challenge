@@ -9,7 +9,7 @@ import EditModal from '../edit-modal/EditModal';
 import DeleteModal from '../delete-modal/DeleteModal';
 
 /** Models */
-import { DirectoryItem } from '../../../models/directories.models';
+import { DirectoryItem } from '../../../mobx/data/directory-store';
 
 /** Styles */
 import styles from './Item.module.scss';

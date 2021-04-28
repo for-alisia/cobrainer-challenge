@@ -7,13 +7,14 @@ export class DirectoryItem {
   type: ItemType;
   name: string;
   path: string;
-  childrens?: DirectoryItem[];
+  childrens: DirectoryItem[] | null;
   content?: string;
 
   constructor(name: string, path: string, type: ItemType) {
     this.name = name;
     this.path = path;
     this.type = type;
+    this.childrens = null;
 
     if (this.type === 'folder') {
       this.childrens = [];
@@ -25,16 +26,23 @@ export class DirectoryItem {
 
     makeAutoObservable(this);
   }
+
+  editName(newName: string) {
+    this.name = newName;
+  }
 }
 
 export default class DirectoryStore {
   rootStore: RootStore;
-  structure: DirectoryItem[] = [];
-  selectedItem: DirectoryItem | null = null;
-  message: string | null = null;
+  structure: DirectoryItem[];
+  selectedItem: DirectoryItem | null;
+  message: string | null;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
+    this.structure = [];
+    this.selectedItem = null;
+    this.message = null;
 
     makeAutoObservable(this, {
       findNode: false,
@@ -80,8 +88,10 @@ export default class DirectoryStore {
   }
 
   // Reaction: EDIT ITEM'S NAME
-  edit(path: string, newName: string) {
+  edit(newName: string, path: string) {
     let nodeToEdit = this.findNode(path, this.structure);
+
+    console.log(nodeToEdit);
 
     if (!nodeToEdit) {
       this.message = 'Can not find an item with this path';
@@ -120,6 +130,7 @@ export default class DirectoryStore {
   // Reaction: ADD_SELECTED
   addSelected(node: DirectoryItem) {
     this.selectedItem = node;
+    console.log(this.selectedItem);
   }
 
   // Reaction: REMOVE_SELECTED

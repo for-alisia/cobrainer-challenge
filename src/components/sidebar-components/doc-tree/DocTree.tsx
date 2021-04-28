@@ -1,8 +1,7 @@
+import { observer } from 'mobx-react-lite';
 /** Components */
 import Item from '../item/Item';
-
-/** Models */
-import { DirectoryItem } from '../../../models/directories.models';
+import { DirectoryItem } from '../../../mobx/data/directory-store';
 
 /** Styles */
 import styles from './DocTree.module.scss';
@@ -13,6 +12,8 @@ interface DocTreeProps {
 
 const DocTree: React.FC<DocTreeProps> = ({ data }) => {
   if (!data) return null;
+  console.log('re-render from tree');
+  console.log(data);
   return (
     <div className={styles.wrapper}>
       {data.map((item) => {
@@ -34,4 +35,4 @@ const DocTree: React.FC<DocTreeProps> = ({ data }) => {
   );
 };
 
-export default DocTree;
+export default observer(DocTree);

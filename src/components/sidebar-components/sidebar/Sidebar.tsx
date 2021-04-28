@@ -16,9 +16,8 @@ const Sidebar = () => {
       directoryStore.removeSelected();
     }
   };
-
-  console.log('re-render');
-
+  console.log('re-render from sidebar');
+  console.log(directoryStore.structure);
   return (
     <div className={styles.wrapper} onClick={clickHandler} data-el="out">
       <Logo />
